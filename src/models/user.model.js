@@ -20,9 +20,9 @@ const userSchema = new Schema(
       profilePicture: {
          type: String,
       },
-      refreshToken: {
-         type: String,
-      },
+      accessToken:{
+         type:String
+      }
    },
    { timestamps: true }
 );

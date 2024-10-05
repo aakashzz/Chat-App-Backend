@@ -10,6 +10,10 @@ const messageSchema = new Schema({
         type:String,
         ref:"User",
         required:true,
+    },
+    chat:{
+        type:Schema.Types.ObjectId,
+        ref:"Chat"
     }
 },
 {timestamps:true});
