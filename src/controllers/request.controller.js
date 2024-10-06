@@ -23,8 +23,9 @@ const receiveAllRequestController = async function(req,res){
 
 const updateRequestStatusController = async function(req,res){
     const {requestId,status} = req.body;
+    const {_id} = req.user;
     if(!(requestId && status)) throw new ApiError("Require Filed Empty");
-    const {requestUpdated} = await updateRequestStatus(requestId,status);
+    const {requestUpdated} = await updateRequestStatus(requestId,status,_id);
 
     res.status(200).json(
         new ApiResponse(201,requestUpdated,"Request Updated")

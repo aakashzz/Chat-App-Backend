@@ -22,7 +22,7 @@ export async function receiverAllRequestService(senderId) {
     return {allRequest}
 }
 
-export async function updateRequestStatus(requestId,status){
+export async function updateRequestStatus(requestId,status,_id){
 
     const requestUpdated = await Request.findByIdAndUpdate(requestId,{
         $set:{
@@ -34,7 +34,8 @@ export async function updateRequestStatus(requestId,status){
     )
     if (status === "Accept") {
         const newContactAdd = await Contact.create({
-            userDetails: requestUpdated.receiverId
+            userDetails: requestUpdated.receiverId,
+            createdBy:_id
         })
         if(!newContactAdd)throw new ApiError(400,"Contact Not be created");
         await newContactAdd.save();

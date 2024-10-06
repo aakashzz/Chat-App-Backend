@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const messageSchema = new Schema({
-    messageItem:{
+    messageContent:{
             type:String,
             required:true,
             trim:true

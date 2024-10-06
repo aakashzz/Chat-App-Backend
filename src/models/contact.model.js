@@ -6,6 +6,10 @@ const contactSchema = new Schema({
             type:Schema.Types.ObjectId,
             ref:"User",
             required:true,
+        },
+        createdBy:{
+            type:Schema.Types.ObjectId,
+            ref:"User"
         }
     
 },

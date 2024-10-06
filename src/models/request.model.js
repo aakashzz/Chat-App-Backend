@@ -14,7 +14,7 @@ const requestSchema = new Schema({
     status: {
         type: String,
         enum: ['Pending', 'Accept', 'Reject'], 
-        default: 'pending' 
+        default: 'Pending' 
     },
 },
 {timestamps:true});
