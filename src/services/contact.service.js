@@ -2,16 +2,16 @@ import { Contact } from "../models/contact.model.js";
 import ApiError from "../utils/ApiError.js";
 
 export async function getAllContactService(_id) {
-   const allContactUser = await Contact.findOne({
+   const allContactUser = await Contact.find({
       createdBy: _id,
    });
    if (!allContactUser) throw new ApiError(501, "Contact not Capturing in DB ");
-   return allContactUser.populate("userDetails");
+   return allContactUser
 }
 export async function deleteContactService(_id) {
    const deleteOneContact = await Contact.findOneAndDelete(
       {
-         userDetails: _id,
+         contactUserDetails: _id,
       },
       {
          new: true,

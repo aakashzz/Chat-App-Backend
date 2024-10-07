@@ -1,18 +1,20 @@
 import { Schema, model } from "mongoose";
 
 const chatSchema = new Schema({
-    messages:[
+    ContactUser:{
+        type:Schema.Types.ObjectId,
+        ref:"Contact"
+    },
+    AdminId:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+    },
+    Messages:[
         {
             type:Schema.Types.ObjectId,
-            ref:"Message",
-            required:true,
+            ref:"Message"
         }
-    ],
-    createdBY:{
-        type:String,
-        ref:"User",
-        required:true,
-    }
+    ]
 },
 {timestamps:true});
 

@@ -5,7 +5,7 @@ import { verifyUserAuthenticate } from "../middlewares/authenticate.middleware.j
 const router = Router();
 
 router.route("/new-request").post(verifyUserAuthenticate,newRequestCreateController);
-router.route("/receive-all-request").post(verifyUserAuthenticate,receiveAllRequestController);
+router.route("/receive-all-request").get(verifyUserAuthenticate,receiveAllRequestController);
 router.route("/remove-request").post(verifyUserAuthenticate,removeRequestController);
 router.route("/update-request").patch(verifyUserAuthenticate,updateRequestStatusController);
 

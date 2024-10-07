@@ -7,9 +7,12 @@ const messageSchema = new Schema({
             trim:true
         },
     sendedBy:{
-        type:String,
-        ref:"User",
-        required:true,
+        type:Schema.Types.ObjectId,
+        ref:"User", 
+    },
+    readBy:{
+        type:Schema.Types.ObjectId,
+        ref:"Contact"
     },
     chat:{
         type:Schema.Types.ObjectId,

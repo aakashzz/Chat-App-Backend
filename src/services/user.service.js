@@ -45,7 +45,7 @@ export const createNewUserAccount = async function (
       fullName,
       email,
       password,
-      profilePicture: uploadedObject.url,
+      profilePicture: uploadedObject.secure_url,
    });
    return newUserCreated;
 };

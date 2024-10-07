@@ -14,8 +14,9 @@ const newRequestCreateController = async function(req,res){
 }
 
 const receiveAllRequestController = async function(req,res){
-    const senderId = req.user?._id;
-    const {allRequest} = await receiverAllRequestService(senderId);
+    const {_id} = req.user;
+    console.log(_id)
+    const allRequest = await receiverAllRequestService(_id);
     return res.status(200).json(
         new ApiResponse(200,allRequest,"All Request Have Show")
     )

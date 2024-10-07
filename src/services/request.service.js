@@ -14,12 +14,12 @@ export async function newRequestCreateService(senderID,receiverId){
 
 export async function receiverAllRequestService(senderId) {
     const allRequest = await Request.findOne({
-        senderId:senderId,
+        senderId,
     })
+    console.log(allRequest)
+    if(!allRequest){throw new ApiError(401,"Id Not SenderID");}
 
-    if(!allRequest) throw new ApiError(401,"Id Not SenderID");
-
-    return {allRequest}
+    return allRequest.populate('receiverId')
 }
 
 export async function updateRequestStatus(requestId,status,_id){
@@ -32,9 +32,10 @@ export async function updateRequestStatus(requestId,status,_id){
             new:true
         }
     )
+    console.log(requestUpdated?.receiverId)
     if (status === "Accept") {
-        const newContactAdd = await Contact.create({
-            userDetails: requestUpdated.receiverId,
+        const newContactAdd = await Contact?.create({
+            contactUserDetails: requestUpdated.receiverId,
             createdBy:_id
         })
         if(!newContactAdd)throw new ApiError(400,"Contact Not be created");
