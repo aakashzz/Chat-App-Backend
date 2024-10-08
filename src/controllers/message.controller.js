@@ -4,24 +4,21 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const sendMessageController = async function (req, res) {
    try {
-      const { messageContent } = req.body;
-      const { sendedBy } = req.params;
+      const { messageContent, sendTo } = req.body;
       const { _id } = req.user; 
 
-      if (!messageContent && !sendedBy && !_id) {
+      if (!messageContent && !sendTo && !_id) {
          throw new ApiError(400, "Required Parameter are Empty");
       }
-      const { newMessage, createChatOfUser } = await sendedMessageService(
-         messageContent,
-         sendedBy,
-         _id
-      );
-      return res.status(200).json(
-        new ApiResponse(201,[newMessage,createChatOfUser],"Message Send SuccessFully")
-      )
+     const {createChatOfUser,newMessage} = await sendedMessageService(messageContent,sendTo,_id)
+     console.log(createChatOfUser)
+     console.log(newMessage)
+     return res.status(200).json(
+      new ApiResponse(201,newMessage,"Send Message")
+     )
    } catch (error) {
       console.error(error);
-      return new ApiError(error.message);
+      throw new ApiError(500,error.message);
    }
 };
 

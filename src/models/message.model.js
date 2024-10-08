@@ -10,7 +10,7 @@ const messageSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User", 
     },
-    readBy:{
+    receiver: {
         type:Schema.Types.ObjectId,
         ref:"Contact"
     },

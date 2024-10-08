@@ -5,10 +5,6 @@ const chatSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"Contact"
     },
-    AdminId:{
-        type:Schema.Types.ObjectId,
-        ref:"User",
-    },
     Messages:[
         {
             type:Schema.Types.ObjectId,

@@ -6,7 +6,7 @@ import { allContactController,deleteContactController } from "../controllers/con
 const router = Router();
 
 router.route("/all-contact").get(verifyUserAuthenticate,allContactController)
-router.route("/delete-contact").get(verifyUserAuthenticate,deleteContactController)
+router.route("/delete-contact").delete(verifyUserAuthenticate,deleteContactController)
 
 
 export default router
