@@ -27,13 +27,13 @@ export const createNewUserAccount = async function (
    profilePicture
 ) {
    if (
-      [fullName, email, password, profilePicture].some(
+      [fullName, email, password].some(
          (entity) => entity?.trim() === ""
       )
    ) {
       throw new ApiError(400, "Field are Required... !");
    }
-
+   if(!profilePicture)throw new ApiError(400,"Image Not Here")
    const existedUser = await User.findOne({ email });
 
    if (existedUser)
@@ -67,6 +67,7 @@ export async function loginUserAccount(email, password) {
       existedUser._id,
       existedUser.email
    );
+   console.log(accessToken)
    existedUser.accessToken = accessToken;
    await existedUser.save();
    return { accessToken, existedUser };

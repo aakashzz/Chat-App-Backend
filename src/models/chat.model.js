@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 const chatSchema = new Schema({
     ContactUser:{
         type:Schema.Types.ObjectId,
-        ref:"Contact"
+        ref:"User"
     },
     Messages:[
         {
@@ -13,5 +13,5 @@ const chatSchema = new Schema({
     ]
 },
 {timestamps:true});
-
+    
 export const Chat = model("Chat",chatSchema);

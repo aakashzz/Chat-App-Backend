@@ -11,6 +11,7 @@ const registrationController = async function (req, res) {
    try {
       const { fullName, email, password } = req.body;
       const profilePicture = req.file?.path;
+      console.log(req.file )
       console.log(profilePicture)
       const newUserDetails = await createNewUserAccount(
          fullName,
@@ -43,13 +44,13 @@ const loginController = async function (req, res) {
          email,
          password
       );
-
+      
       return res
-         .status(200)
-         .cookie("accessToken", accessToken, optionsOfCookie)
-         .json(new ApiResponse(200, existedUser, "User Logged-In"));
+      .status(200)
+      .cookie("accessToken", accessToken, optionsOfCookie)
+      .json(new ApiResponse(200, existedUser, "User Logged-In"));
    } catch (error) {
-      console.log(error.message);
+      console.log("This error",error.message);
       return new ApiError(500, error?.message);
    }
 };

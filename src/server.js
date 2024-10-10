@@ -31,12 +31,14 @@ import usersRouter from "./routes/user.routes.js";
 import contactRouter from "./routes/contact.routes.js"
 import requestRouter from "./routes/request.routes.js"
 import messageRouter from "./routes/message.routes.js"
+import chatRouter from "./routes/chat.routes.js"
 
 //routes
 app.use("/api/v1/users",usersRouter);
 app.use("/api/v1/contact",contactRouter);
 app.use("/api/v1/request",requestRouter)
 app.use("/api/v1/message",messageRouter)
+app.use("/api/v1/chat",chatRouter)
 
 //dbConnection stablish
 databaseConnection()
