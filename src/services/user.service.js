@@ -54,7 +54,7 @@ export async function loginUserAccount(email, password) {
    if ([email, password].some((entity) => entity?.trim() === "")) {
       throw new ApiError(400, "Field are Required... !");
    }
-   const existedUser = await User.findOne( {email:email});
+   const existedUser = await User.findOne( {email:email})
 
    if (!existedUser)
       throw new ApiError(400, "User Not Existed Please create Account");
@@ -67,9 +67,9 @@ export async function loginUserAccount(email, password) {
       existedUser._id,
       existedUser.email
    );
-   console.log(accessToken)
    existedUser.accessToken = accessToken;
    await existedUser.save();
+   
    return { accessToken, existedUser };
 }
 //logout service
@@ -82,4 +82,9 @@ export async function logoutUserAccount(userId) {
       }
    })
    return removeTokenDB
+}
+export async function getAllUserAccount(user) {
+   if(!user) throw new ApiError(400,"User Detail Not Here");
+   const findUser = await User.find({$or:[{fullName:user},{email:user}]}).select("-password -accessToken")
+   return findUser
 }

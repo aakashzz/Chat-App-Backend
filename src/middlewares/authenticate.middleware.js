@@ -5,6 +5,7 @@ import ApiError from "../utils/ApiError.js";
 export async function verifyUserAuthenticate(req, res, next) {
    try {
       const token = req.cookies?.accessToken;
+
       if (!token) throw new ApiError(400, "Unauthorized Token");
 
       const decodedToken = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -12,7 +13,7 @@ export async function verifyUserAuthenticate(req, res, next) {
       if (!decodedToken) {
          return new ApiError(401, "Token Are Expire Login now");
       }
-      const user = await User.findById(decodedToken.id).select(" -password -accessToken");
+      const user = await User.findById(decodedToken.id).select("-password -accessToken");
       if (!user) {
          return new ApiError(401, "Invalid Access Token");
       }

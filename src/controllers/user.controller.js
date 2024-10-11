@@ -2,6 +2,7 @@ import {
    createNewUserAccount,
    loginUserAccount,
    logoutUserAccount,
+   getAllUserAccount,
 } from "../services/user.service.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
@@ -44,11 +45,11 @@ const loginController = async function (req, res) {
          email,
          password
       );
-      
-      return res
+      // localStorage.setItem("accessToken",accessToken)
+      return( res
       .status(200)
       .cookie("accessToken", accessToken, optionsOfCookie)
-      .json(new ApiResponse(200, existedUser, "User Logged-In"));
+      .json(new ApiResponse(200, existedUser, "User Logged-In")))
    } catch (error) {
       console.log("This error",error.message);
       return new ApiError(500, error?.message);
@@ -81,4 +82,19 @@ const getUserController = async function (req,res){
         throw new ApiError(500, error?.message);
     }
 }
-export { registrationController, loginController, logoutController, getUserController };
+const findAllUserController = async function (req,res){
+    try {
+      const {user} = req.body;
+      if(!user) throw new ApiError(401,"User not here")
+         const responseAllUser = await getAllUserAccount(user);
+      if(!responseAllUser) throw new ApiError(401,"User not here")
+         return res.status(200)
+         .json(
+            new ApiResponse(200,responseAllUser,'User SuccessFully Logout')
+         )
+    } catch (error) {
+        console.log(error.message);
+        throw new ApiError(500, error?.message);
+    }
+}
+export { registrationController, loginController, logoutController, getUserController,findAllUserController };

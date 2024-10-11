@@ -1,24 +1,25 @@
 import express from "express";
 // import { Server } from "socket.io";
-import http from "http";
+// import http from "http";
 import "dotenv/config";
 import { databaseConnection } from "./db/databaseConnection.js";
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
 const app = express();
-const httpServer = http.createServer(app);
+// const httpServer = http.createServer(app);
 const port = process.env.PORT || 8000;
 
+app.set("trust proxy",1)
 //middleware
+app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
-app.use(express.json());
+app.use(express.json({limit:"20kb"}));
 app.use(express.static("public"));
 app.use(cors({
    origin: process.env.ORIGIN,
    credentials:true,
 }))
-app.use(cookieParser());
 
 
 
@@ -48,4 +49,4 @@ databaseConnection()
    })
    .catch((error) => console.error(error));
 
-httpServer.listen(port, console.log("server is start in ..", port));
+app.listen(port, console.log("server is start in ..", port));
