@@ -9,6 +9,6 @@ router.route("/registration").post(upload.single("profilePicture"),registrationC
 router.route("/login").post(loginController)
 router.route("/logout").get(verifyUserAuthenticate,logoutController)
 router.route("/getUser").get(verifyUserAuthenticate,getUserController)
-router.route("/findAllUser").get(verifyUserAuthenticate,findAllUserController)
+router.route("/findAllUser").post(verifyUserAuthenticate,findAllUserController)
 
 export default router

@@ -10,11 +10,11 @@ export async function getAllContactService(_id) {
          path: "contactDetails",
          model: "User",
       },
-   });
+   }).select("-password -accessToken -contacts")
    if (!allContactUser) throw new ApiError(501, "Contact not Capturing in DB ");
    return allContactUser.contacts
       
-}
+}  
 export async function deleteContactService(id) {
    const deleteOneContact = await Contact.findOneAndDelete(
       {

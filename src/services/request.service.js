@@ -15,15 +15,14 @@ export async function newRequestCreateService(senderID, receiverId) {
 
 export async function receiverAllRequestService(senderId) {
    const allRequest = await Request.findOne({
-      senderId,
-   });
-   console.log(allRequest);
+      receiverId:senderId,
+   }).select(" -password -accessToken")
    if (!allRequest) {
-      throw new ApiError(401, "Id Not SenderID");
+      throw new ApiError(401, "Id Not Correct for receiver");
    }
 
-   return allRequest.populate("receiverId");
-}
+   return allRequest.populate("senderId");
+}  
 
 export async function updateRequestStatus(requestId, status) {
    const requestUpdated = await Request.findByIdAndUpdate(

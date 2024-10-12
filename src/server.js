@@ -14,7 +14,7 @@ app.set("trust proxy",1)
 //middleware
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
-app.use(express.json({limit:"20kb"}));
+app.use(express.json());
 app.use(express.static("public"));
 app.use(cors({
    origin: process.env.ORIGIN,
