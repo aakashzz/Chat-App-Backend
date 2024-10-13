@@ -3,18 +3,12 @@ import { User } from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 
 export async function getAllContactService(_id) {
-   const allContactUser = await User.findById(_id).populate("contacts")
-   .populate({
-      path: "contacts",
-      populate: {
-         path: "contactDetails",
-         model: "User",
-      },
-   }).select("-password -accessToken -contacts")
+   const allContactUser = await Contact.find({ userId: _id })
+      .populate("contactDetails")
+      .select("-password -accessToken -contacts");
    if (!allContactUser) throw new ApiError(501, "Contact not Capturing in DB ");
-   return allContactUser.contacts
-      
-}  
+   return allContactUser;
+}
 export async function deleteContactService(id) {
    const deleteOneContact = await Contact.findOneAndDelete(
       {

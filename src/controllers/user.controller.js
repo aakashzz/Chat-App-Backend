@@ -85,7 +85,7 @@ const getUserController = async function (req,res){
 const findAllUserController = async function (req,res){
     try {
       const {userName} = req.body;
-      if(!userName) throw new ApiError(401,"User not here")
+      if(!userName) throw new ApiError(401,"UserName not here")
          const responseAllUser = await getAllUserAccount(userName);
       if(!responseAllUser) new ApiError(401,"User not here")
          return res.status(200)

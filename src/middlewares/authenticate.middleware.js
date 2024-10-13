@@ -5,7 +5,6 @@ import ApiError from "../utils/ApiError.js";
 export async function verifyUserAuthenticate(req, res, next) {
    try {
       const token = req.cookies?.accessToken;
-
       if (!token) throw new ApiError(400, "Unauthorized Token");
 
       const decodedToken = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -20,7 +19,7 @@ export async function verifyUserAuthenticate(req, res, next) {
       req.user = user;
       next();
    } catch (error) {
-      console.error("decoded value Err", error.message);
+      console.error("decoded Token Error  ", error);
       return new ApiError(500, `Verify Auth ${error.message}`);
    }
 }

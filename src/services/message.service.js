@@ -10,13 +10,13 @@ export async function sendedMessageService(messageContent,sendTo,_id){
         sendedBy:_id
     });
     if(!newMessage)throw new ApiError(401,"Something While Wrong Check the SendMessage Service");
-    const createChatOfUser = await Chat.create({
+    const createdChatOfUser = await Chat.findOne({
         ContactUser:sendTo
-    })
-    if(!createChatOfUser)throw new ApiError(401,"Something While Wrong Check the SendMessage Service in Chat creation");
-    await createChatOfUser.Messages.push(newMessage._id);
+    }).select("-password -accessToken")
+    if(!createdChatOfUser)throw new ApiError(401,"Something While Wrong Check the SendMessage Service in Chat User");
+    await createdChatOfUser.Messages.push(newMessage._id);
     await newMessage.save();
-    await createChatOfUser.save();
-    return {newMessage, createChatOfUser}
+    await createdChatOfUser.save();
+    return {newMessage, createdChatOfUser}
 
 }

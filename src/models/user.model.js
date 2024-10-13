@@ -24,12 +24,6 @@ const userSchema = new Schema(
       accessToken:{
          type:String
       },
-      contacts:[
-         {
-            type:Schema.Types.ObjectId,
-            ref:"Contact"
-         }
-      ]
    },
    { timestamps: true }
 );

@@ -20,7 +20,7 @@ const allContactController = async function(req,res){
 }
 const deleteContactController = async function(req,res){
     try {
-        const {id} = req.body;
+        const id = req.params.id;
         const deleteOneContact = await deleteContactService(id);
         if (!deleteOneContact) {
             throw new ApiError(401,"UnAuthorized Request Please Check User Id Details");

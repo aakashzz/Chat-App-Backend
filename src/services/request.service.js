@@ -14,14 +14,16 @@ export async function newRequestCreateService(senderID, receiverId) {
 }
 
 export async function receiverAllRequestService(senderId) {
-   const allRequest = await Request.findOne({
+   const allRequest = await Request.find({
       receiverId:senderId,
-   }).select(" -password -accessToken")
+   }).populate("senderId").select(" -password -accessToken")
    if (!allRequest) {
-      throw new ApiError(401, "Id Not Correct for receiver");
+      return new ApiError(401, "request are empty");
    }
-
-   return allRequest.populate("senderId");
+   
+   // const allRequestCollection = await allRequest.map((value)=>value.populate("senderId"));
+   console.log(allRequest)
+   return allRequest
 }  
 
 export async function updateRequestStatus(requestId, status) {
@@ -40,6 +42,7 @@ export async function updateRequestStatus(requestId, status) {
    if (status === "Accept") {
       const newContactCreate = await Contact.create({
          contactDetails: requestUpdated.receiverId,
+         userId:requestUpdated.senderId,
       });
       if (!newContactCreate) throw new ApiError(400, "Contact Not be created");
 

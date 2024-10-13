@@ -1,9 +1,14 @@
 import { Schema, model } from "mongoose";
 
 const chatSchema = new Schema({
-    ContactUser:{
+    id:{
         type:Schema.Types.ObjectId,
         ref:"User"
+    },
+    ContactUserId:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+        unique:true
     },
     Messages:[
         {
