@@ -1,6 +1,6 @@
 import express from "express";
-// import { Server } from "socket.io";
-// import http from "http";
+import { Server } from "socket.io";
+import http from "http";
 import "dotenv/config";
 import { databaseConnection } from "./db/databaseConnection.js";
 import cors from "cors"
@@ -20,12 +20,6 @@ app.use(cors({
    origin: process.env.ORIGIN,
    credentials:true,
 }))
-
-
-
-
-
-
 
 //routes imported
 import usersRouter from "./routes/user.routes.js";
@@ -48,5 +42,15 @@ databaseConnection()
       
    })
    .catch((error) => console.error(error));
+//socket connection
+
+// const io = new Server(httpServer)
+
+// io.on('connection', (socket) => {
+//    console.log('a user connected');
+//    socket.on('disconnect', () => {
+//      console.log('user disconnected');
+//    });
+//  });
 
 app.listen(port, console.log("server is start in ..", port));

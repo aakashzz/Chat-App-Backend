@@ -1,37 +1,27 @@
 import { Chat } from "../models/chat.model.js";
+import { User } from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 
-
-export async function deleteChatService(chatId){
-    const deletedChat = await Chat.findByIdAndDelete(chatId,{new:true});
-    if(!deletedChat)throw new ApiError(400,"Chat Not Deleted")
-        return deletedChat
+export async function createChatService(userId, receiverId) {
+   const newChatResponse = await Chat.create({
+      user: [userId, receiverId],
+   });
+   if (!newChatResponse) new ApiError(401, "new Chat Not create");
+   console.log(newChatResponse);
+   return newChatResponse;
 }
 
-export async function showChatService(userId) {
-    const allChats = await Chat.find({
-        ContactUserId:userId
-    }).populate("Messages")
-    
-    if(!allChats)throw new ApiError(401,"Chats Not Showing Something Wrong");
-
-    return allChats 
+export async function showAllChatUserService(userId) {
+   const showChatUserResponse = await Chat.find({
+      user: userId,
+   }).populate("user");
+   if (!showChatUserResponse) throw new ApiError(400, "Show Chat Not Work");
+   return showChatUserResponse;
 }
-
-export async function createChatService(ContactUserId,_id){
-    const newChat = await Chat.create({
-        id:_id,
-        ContactUserId,
-    });
-    if(!newChat)throw new ApiError(400,"Chat Not Create");
-    return newChat
-
-}
-export async function showAllChatUserService(_id){
-    const newChat = await Chat.find({
-        id:_id,
-    }).populate("ContactUserId")
-    if(!newChat)throw new ApiError(400,"All User Not Shoe");
-    return newChat
-
+export async function deleteChatService(chatId) {
+   const deleteChatResponse = await Chat.find({
+      _id: chatId,
+   },{new:true});
+   if (!deleteChatResponse) throw new ApiError(400, "Chat Delete Not Work");
+   return deleteChatResponse;
 }

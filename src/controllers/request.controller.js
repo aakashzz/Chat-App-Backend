@@ -1,5 +1,4 @@
 import {
-   deleteRequestService,
    newRequestCreateService,
    receiverAllRequestService,
    updateRequestStatus,
@@ -32,25 +31,16 @@ const receiveAllRequestController = async function (req, res) {
 const updateRequestStatusController = async function (req, res) {
    const { requestId, status } = req.body;
    if (!(requestId && status)) throw new ApiError("Require Filed Empty");
-   const { requestUpdated } = await updateRequestStatus(requestId, status);
+   const  requestResponse  = await updateRequestStatus(requestId, status);
 
    res.status(200).json(
-      new ApiResponse(201, requestUpdated, "Request Updated")
+      new ApiResponse(201, requestResponse, "Request Updated")
    );
-};
-
-const removeRequestController = async function (req, res) {
-   const { requestId } = req.body;
-   if (!requestId) throw new ApiError(401, "Request ID not here");
-   await deleteRequestService(requestId);
-   return res
-      .status(201)
-      .json(new ApiResponse(201, [], "Request Delete SuccessFully"));
 };
 
 export {
    newRequestCreateController,
    receiveAllRequestController,
    updateRequestStatusController,
-   removeRequestController,
+   
 };

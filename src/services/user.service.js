@@ -86,6 +86,5 @@ export async function logoutUserAccount(userId) {
 export async function getAllUserAccount(userName) {
    if(!userName) throw new ApiError(400,"User Detail Not Here");
    const findUser = await User.find({fullName:userName}).select("-password -accessToken")
-   console.log(findUser)
    return findUser
 }

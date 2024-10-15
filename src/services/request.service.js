@@ -22,7 +22,6 @@ export async function receiverAllRequestService(senderId) {
    }
    
    // const allRequestCollection = await allRequest.map((value)=>value.populate("senderId"));
-   console.log(allRequest)
    return allRequest
 }  
 
@@ -38,7 +37,6 @@ export async function updateRequestStatus(requestId, status) {
          new: true,
       }
    );
-   console.log(requestUpdated?.receiverId);
    if (status === "Accept") {
       const newContactCreate = await Contact.create({
          contactDetails: requestUpdated.receiverId,
@@ -46,31 +44,13 @@ export async function updateRequestStatus(requestId, status) {
       });
       if (!newContactCreate) throw new ApiError(400, "Contact Not be created");
 
-      const user = await User.findByIdAndUpdate(
-         requestUpdated.senderId,
-         {
-            $push: {
-               contacts: newContactCreate,
-            },
-         },
-         {
-            new: true,
-         }
-      );
-
-      await user.save();
+     //request === "Accept and Reject Request will remove"
    }
-   if (!requestUpdated) throw new ApiError(401, "Request Not Updated");
-   await requestUpdated.save();
-   return { requestUpdated };
+   
+   if (!requestUpdated) new ApiError(401, "Request Not Updated");
+   const deletedRequest = await Request.findByIdAndDelete({_id:requestUpdated._id},{new:true})
+
+   return  deletedRequest ;
 }
 
-export async function deleteRequestService(requestId) {
-   const requestDeleted = await Request.deleteOne({
-      _id: requestId,
-   });
-   if (!requestDeleted) {
-      throw new ApiError(400, "Request NoT deleted");
-   }
-   return { requestDeleted };
-}
+

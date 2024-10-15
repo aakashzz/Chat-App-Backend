@@ -1,25 +1,35 @@
-import { sendedMessageService } from "../services/message.service.js";
+import { sendMessageService, showAllMessagesService } from "../services/message.service.js";
 import ApiError from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const sendMessageController = async function (req, res) {
+const sendMessageController = async function(req,res){
    try {
-      const { messageContent, sendTo } = req.body;
-      const { _id } = req.user; 
-
-      if (!messageContent && !sendTo && !_id) {
-         throw new ApiError(400, "Required Parameter are Empty");
-      }
-     const {createChatOfUser,newMessage} = await sendedMessageService(messageContent,sendTo,_id)
-     console.log(createChatOfUser)
-     console.log(newMessage)
-     return res.status(200).json(
-      new ApiResponse(201,newMessage,"Send Message")
-     )
+      const userId = req.user._id;
+      const {contentOfMessage,chatId} = req.body;
+      if(!chatId && !userId && !contentOfMessage) new ApiError(401,"Required Filed Is Empty");
+      const responseOfNewMessage = await sendMessageService(chatId,userId,contentOfMessage)
+      if(!responseOfNewMessage)new ApiError(400,"In Service Not Message Building");
+      return res.status(201).json(
+         new ApiResponse(201,responseOfNewMessage)
+      )
    } catch (error) {
       console.error(error);
-      throw new ApiError(500,error.message);
+      return new ApiError(500,error.message || "This Error in sendMessageController")
    }
-};
+}
+const showAllMessagesController = async function(req,res){
+   try {
+      const chatId = req.params.id;
+      if(!chatId) new ApiError(401,"Required Filed Is Empty");
+      const responseOfAllMessage = await showAllMessagesService(chatId)
+      if(!responseOfAllMessage)new ApiError(400,"In Service Not Message Fetching");
+      return res.status(201).json(
+         new ApiResponse(201,responseOfAllMessage)
+      )
+   } catch (error) {
+      console.error(error);
+      return new ApiError(500,error.message || "This Error in showAllMessageController")
+   }
+}
 
-export {sendMessageController}
+export {sendMessageController,showAllMessagesController}

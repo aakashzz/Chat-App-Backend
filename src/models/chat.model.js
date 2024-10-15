@@ -1,15 +1,12 @@
 import { Schema, model } from "mongoose";
 
 const chatSchema = new Schema({
-    id:{
-        type:Schema.Types.ObjectId,
-        ref:"User"
-    },
-    ContactUserId:{
-        type:Schema.Types.ObjectId,
-        ref:"User",
-        unique:true
-    },
+    user:[
+        {
+            type:Schema.Types.ObjectId,
+            ref:"User"
+        }
+    ],
     Messages:[
         {
             type:Schema.Types.ObjectId,

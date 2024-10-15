@@ -10,11 +10,7 @@ const messageSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User", 
     },
-    receiver: {
-        type:Schema.Types.ObjectId,
-        ref:"Contact"
-    },
-    chat:{
+    chatId:{
         type:Schema.Types.ObjectId,
         ref:"Chat"
     }

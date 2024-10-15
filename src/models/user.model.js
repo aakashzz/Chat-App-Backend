@@ -5,7 +5,7 @@ const userSchema = new Schema(
       fullName: {
          type: String,
          required: true,
-         unique:true,
+         unique: true,
          trim: true,
       },
       email: {
@@ -21,23 +21,23 @@ const userSchema = new Schema(
       profilePicture: {
          type: String,
       },
-      accessToken:{
-         type:String
+      accessToken: {
+         type: String,
       },
    },
    { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", function (next) {
    if (this.isModified("password")) {
-      this.password = await bcrypt.hash(this.password, 10);
+      this.password =  bcrypt.hash(this.password, 10);
       return next();
    }
    next();
 });
 
 userSchema.methods.IsPasswordCorrect = async function (password) {
-    return await bcrypt.compare(password, this.password);
- };
- 
+   return await bcrypt.compare(password, this.password);
+};
+
 export const User = model("User", userSchema);

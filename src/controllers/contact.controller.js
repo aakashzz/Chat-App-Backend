@@ -9,7 +9,6 @@ const allContactController = async function(req,res){
         if (!allContactResponse) {
             throw new ApiError(401,"UnAuthorized Contact Details");
         }
-        console.log(allContactResponse);
         return res.status(200).json(
             new ApiResponse(200,allContactResponse,"All Contact Fetch")
         )
@@ -25,7 +24,6 @@ const deleteContactController = async function(req,res){
         if (!deleteOneContact) {
             throw new ApiError(401,"UnAuthorized Request Please Check User Id Details");
         }
-        console.log(deleteOneContact);
         return res.status(200).json(
             new ApiResponse(200,[],"Delete Contact in DB")
         )

@@ -18,7 +18,6 @@ export async function deleteContactService(id) {
          new: true,
       }
    );
-   console.log(deleteOneContact);
    if (!deleteOneContact) throw new ApiError(501, "Contact not Delete in DB ");
    return deleteOneContact;
 }
