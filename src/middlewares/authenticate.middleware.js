@@ -5,7 +5,7 @@ import ApiError from "../utils/ApiError.js";
 export async function verifyUserAuthenticate(req, res, next) {
    try {
       const token = req.cookies?.accessToken;
-      if (!token) throw new ApiError(400, "Unauthorized Token");
+      if (!token) throw new ApiError(400, "Token Not Given in Cookies");
 
       const decodedToken = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
 

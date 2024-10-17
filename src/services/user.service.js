@@ -47,7 +47,8 @@ export const createNewUserAccount = async function (
       password,
       profilePicture: uploadedObject.secure_url,
    });
-   return newUserCreated;
+
+  return newUserCreated;
 };
 //loginUser service
 export async function loginUserAccount(email, password) {

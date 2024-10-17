@@ -18,10 +18,8 @@ const registrationController = async function (req, res) {
          password,
          profilePicture
       );
-
       return res
          .status(200)
-
          .json(
             new ApiResponse(
                200,
