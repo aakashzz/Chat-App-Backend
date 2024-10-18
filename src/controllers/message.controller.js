@@ -50,16 +50,22 @@ const getChatUserProfileController = async function (req, res) {
    try {
       const chatId = req.params.id;
       const userId = req.user._id;
-      console.log(chatId, userId);
       if (!chatId) new ApiError(401, "Required Filed Is Empty");
       const responseOfGetChatUser = await getChatUserProfileService(
          userId,
          chatId
       );
-      console.log("Response", responseOfGetChatUser);
       if (!responseOfGetChatUser)
          new ApiError(400, "In Service Not Message Fetching");
-      return res.status(200).json(new ApiResponse(201, responseOfGetChatUser));
+      return res
+         .status(200)
+         .json(
+            new ApiResponse(
+               201,
+               responseOfGetChatUser,
+               "Get User Profile SuccessFully"
+            )
+         );
    } catch (error) {
       console.error(error);
       return new ApiError(500, error.message || "This Error in getChatUser");
