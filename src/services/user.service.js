@@ -52,7 +52,7 @@ export const createNewUserAccount = async function (
 };
 //loginUser service
 export async function loginUserAccount(email, password) {
-   if ([email, password].some((entity) => entity?.trim() === "")) {
+   if ([email, password].some((entity) => entity?.trim() === "")) {  
       throw new ApiError(400, "Field are Required... !");
    }
    const existedUser = await User.findOne({email})

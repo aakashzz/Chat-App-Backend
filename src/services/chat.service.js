@@ -1,6 +1,6 @@
 import { Chat } from "../models/chat.model.js";
 import ApiError from "../utils/ApiError.js";
-
+import {Message} from "../models/message.model.js"
 //create chat service
 export async function createChatService(userId, receiverId) {
    const newChatResponse = await Chat.create({
@@ -34,12 +34,12 @@ export async function showAllChatUserService(userId) {
 
 //delete Chat Service
 export async function deleteChatService(chatId) {
-   const deleteChatResponse = await Chat.find(
-      {
-         _id: chatId,
-      },
-      { new: true }
+
+   const deleteAllMessages = await Message.find({chatId:chatId}).deleteMany();
+   if(!deleteAllMessages) throw new ApiError(500,"Messages Not Be Deleted");
+   const deleteChatResponse = await Chat.findOneAndDelete(
+      {_id:chatId},{new:true}
    );
    if (!deleteChatResponse) throw new ApiError(400, "Chat Delete Not Work");
-   return deleteChatResponse;
+   return deleteChatResponse; 
 }

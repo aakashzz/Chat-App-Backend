@@ -5,6 +5,7 @@ import "dotenv/config";
 import { databaseConnection } from "./db/databaseConnection.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -23,6 +24,20 @@ app.use(
    })
 );
 
+//--------------------development-----------------
+// const __dirname1 = path.resolve();
+// if (process.env.NODE_ENV === "production") {
+//    app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+//    app.get("*", (req, res) =>
+//       res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+//    );
+// } else {
+//    app.get("/", (req, res) => {
+//       res.send("API is running..");
+//    });
+// }
+//--------------------development-----------------
 //routes imported
 import usersRouter from "./routes/user.routes.js";
 import contactRouter from "./routes/contact.routes.js";
@@ -53,16 +68,16 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-   console.log("a user connected",socket.id);
-   // socket.on("setup", (userDetails) => {
-   //    socket.join(userDetails[0]._id);
-   //    // socket.emit("connected");
-   // });
+   console.log("a user connected", socket.id);
+   socket.on("setup", (id) => {
+      socket.join(id);
+      socket.emit("connected");
+   });
 
-   socket.on("sendMessage",(newMessageReceived)=>{
-      console.log(newMessageReceived)
-      socket.to(newMessageReceived.data.data.sendedBy).emit('receiveMessage', newMessageReceived);
-   }) 
+   socket.on("sendMessage", (data) => {
+      const { sender, message } = data;
+      socket.to(sender).emit("receiveMessage", message);
+   });
 });
 
 httpServer.listen(port, console.log("server is start in ..", port));

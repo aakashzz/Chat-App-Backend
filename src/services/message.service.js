@@ -12,7 +12,7 @@ export async function sendMessageService(chatId, userId, messageContent) {
       sendedBy: userId,
    });
    if (!newMessageResponse) throw new ApiError(400, "Message Not Created");
-   return newMessageResponse;
+   return newMessageResponse.populate("sendedBy");
 }
 
 export async function showAllMessagesService(chatId) {
