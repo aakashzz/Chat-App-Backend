@@ -1,5 +1,6 @@
 import {
    createChatService,
+
    deleteChatService,
    showAllChatUserService,
 } from "../services/chat.service.js";
@@ -25,18 +26,14 @@ const createChatController = async function (req, res) {
 const showChatUserController = async function (req, res) {
    try {
       const userId = req.user._id;
-      const resultOfAllChatUser = await showAllChatUserService(userId);
+      // const {type} = req.body;
+      const resultOfAllChatUser = await showAllChatUserService(userId );
+      console.log(resultOfAllChatUser)
 
       if (!resultOfAllChatUser) throw new ApiError(400, "All Chat User");
       return res
          .status(200)
-         .json(
-            new ApiResponse(
-               200,
-               resultOfAllChatUser,
-               "All User Fetch",
-            )
-         );
+         .json(new ApiResponse(200, resultOfAllChatUser, "All User Fetch"));
    } catch (error) {
       console.error("Show Chat User Error in backend", error);
       return new ApiError(500, error.message);
@@ -56,4 +53,10 @@ const deleteChatController = async function (req, res) {
    }
 };
 
-export { createChatController, showChatUserController, deleteChatController };
+
+
+export {
+   createChatController,
+   showChatUserController,
+   deleteChatController,
+};

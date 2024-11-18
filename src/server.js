@@ -5,7 +5,7 @@ import "dotenv/config";
 import { databaseConnection } from "./db/databaseConnection.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
+import { WebSocketServer } from "ws";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -45,25 +45,45 @@ databaseConnection()
    })
    .catch((error) => console.error(error));
 
-const io = new Server(httpServer, {
-   // pingTimeout: 60000,
-   cors: {
-      origin: process.env.ORIGIN,
-      credentials: true,
-   },
+const wss = new WebSocketServer({ server: httpServer });
+const rooms = {};
+
+wss.on("connection", (ws, req) => {
+   ws.send("Connected Server");
+
+   ws.on("message", (data) => {
+      const parseData = JSON.parse(data);
+      console.log(parseData);
+      switch (parseData.action) {
+         case "join":
+            joinRoom(ws, parseData.room);
+            break;
+         case "sendMessage":
+            sendMessageToRoom(ws, parseData.room, parseData.data);
+            break;
+
+      }
+   });
 });
 
-io.on("connection", (socket) => {
-   console.log("a user connected", socket.id);
-   socket.on("setup", (id) => {
-      socket.join(id);
-      socket.emit("connected");
-   });
+function joinRoom(ws, room) {
+   if (!rooms[room]) {
+      rooms[room] = [];
+   }
+   rooms[room].push(ws);
+   ws.send(JSON.stringify({ action: "join", room }));
+}
 
-   socket.on("sendMessage", (data) => {
-      const { sender, message } = data;
-      socket.to(sender).emit("receiveMessage", message);
-   });
-});
+function sendMessageToRoom(ws, room, message) {
+   if (rooms[room]) {
+      rooms[room].forEach((client) => {
+         if (client.readyState === ws.OPEN) {
+            client.send(JSON.stringify({ action: "sendMessage", message }));
+         }
+      });
+   }
+}
+
+
 
 httpServer.listen(port, console.log("server is start in ..", port));
