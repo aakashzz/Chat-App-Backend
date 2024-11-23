@@ -7,6 +7,7 @@ import {
 import ApiError from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+
 const createChatController = async function (req, res) {
    try {
       const userId = req.user._id;
@@ -19,9 +20,10 @@ const createChatController = async function (req, res) {
          .json(new ApiResponse(201, result, "Chat Will Be Created"));
    } catch (error) {
       console.error("create Chat error in backend", error);
-      throw new ApiError(500, error);
+      res.status(error.statusCode).json(new ApiResponse(error?.statusCode, error, error?.message));
    }
 };
+
 
 const showChatUserController = async function (req, res) {
    try {
@@ -36,9 +38,11 @@ const showChatUserController = async function (req, res) {
          .json(new ApiResponse(200, resultOfAllChatUser, "All User Fetch"));
    } catch (error) {
       console.error("Show Chat User Error in backend", error);
-      return new ApiError(500, error.message);
+      res.status(error.statusCode).json(new ApiResponse(error?.statusCode, error, error?.message));
    }
 };
+
+
 const deleteChatController = async function (req, res) {
    try {
       const chatId = req.params.id;
@@ -49,7 +53,7 @@ const deleteChatController = async function (req, res) {
          .json(new ApiResponse(200, [], "Chat Delete SuccessFully"));
    } catch (error) {
       console.error("Delete Chat Error in backend", error);
-      return new ApiError(500, error.message);
+      res.status(error.statusCode).json(new ApiResponse(error?.statusCode, error, error?.message));
    }
 };
 

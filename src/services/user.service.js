@@ -26,20 +26,15 @@ export const createNewUserAccount = async function (
    password,
    profilePicture
 ) {
-   if (
-      [fullName, email, password].some(
-         (entity) => entity?.trim() === ""
-      )
-   ) {
+   if ([fullName, email, password].some((entity) => entity?.trim() === "")) {
       throw new ApiError(400, "Field are Required... !");
    }
-   if(!profilePicture)throw new ApiError(400,"Image Not Here")
+   if (!profilePicture) throw new ApiError(404, "Image Not Found");
    const existedUser = await User.findOne({ email });
 
-   if (existedUser)
-      throw new ApiError(400, "User Account Previously Created..");
+   if (existedUser) throw new ApiError(400, "User Account Previously Created..");
 
-   const {uploadedObject} = await uploadOnCloudinary(profilePicture);
+   const { uploadedObject } = await uploadOnCloudinary(profilePicture);
 
    const newUserCreated = await User.create({
       fullName,
@@ -48,21 +43,21 @@ export const createNewUserAccount = async function (
       profilePicture: uploadedObject.secure_url,
    });
 
-  return newUserCreated;
+   return newUserCreated;
 };
 //loginUser service
 export async function loginUserAccount(email, password) {
-   if ([email, password].some((entity) => entity?.trim() === "")) {  
+   if ([email, password].some((entity) => entity?.trim() === "")) {
       throw new ApiError(400, "Field are Required... !");
    }
-   const existedUser = await User.findOne({email})
+   const existedUser = await User.findOne({ email });
 
    if (!existedUser)
-      throw new ApiError(400, "User Not Existed Please create Account");
+      throw new ApiError(404, "User Not Existed Please create Account");
 
    const isPasswordChecked = await existedUser.IsPasswordCorrect(password);
 
-   if (!isPasswordChecked) throw new ApiError(400, "Password Incorrect");
+   if (!isPasswordChecked) throw new ApiError(404, "Password Incorrect");
 
    const { accessToken } = generateAccessToken(
       existedUser._id,
@@ -70,22 +65,24 @@ export async function loginUserAccount(email, password) {
    );
    existedUser.accessToken = accessToken;
    await existedUser.save();
-   
+
    return { accessToken, existedUser };
 }
 //logout service
 export async function logoutUserAccount(userId) {
-   if(!userId) throw new ApiError(400,"User id Not Here");
+   if (!userId) throw new ApiError(400, "User id Not Here");
 
-   const removeTokenDB = await User.findByIdAndUpdate(userId,{
-      $unset:{
-         accessToken:1,
-      }
-   })
-   return removeTokenDB
+   const removeTokenDB = await User.findByIdAndUpdate(userId, {
+      $unset: {
+         accessToken: 1,
+      },
+   });
+   return removeTokenDB;
 }
 export async function getAllUserAccount(userName) {
-   if(!userName) throw new ApiError(400,"User Detail Not Here");
-   const findUser = await User.find({fullName:userName}).select("-password -accessToken")
-   return findUser
+   if (!userName) throw new ApiError(400, "User Detail Not Here");
+   const findUser = await User.find({ fullName: userName }).select(
+      "-password -accessToken"
+   );
+   return findUser;
 }

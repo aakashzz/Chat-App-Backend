@@ -28,7 +28,8 @@ const registrationController = async function (req, res) {
             )
          );
    } catch (error) {
-      console.error(error.message);
+      console.error(error);
+      res.status(error.statusCode).json(new ApiResponse(error?.statusCode, error, error?.message));
      
    }
 };
@@ -41,14 +42,18 @@ const loginController = async function (req, res) {
          email,
          password
       );
-      // localStorage.setItem("accessToken",accessToken)
       return( res
       .status(200)
       .cookie("accessToken", accessToken, optionsOfCookie)
       .json(new ApiResponse(200, existedUser, "User Logged-In")))
    } catch (error) {
-      console.error("This error",error.message);
-      return new ApiError(500, error?.message);
+      console.error("This error",error);
+      if (error instanceof ApiError) {
+         console.error("This error",error.message);
+         return res.status(error.statusCode || 500).json(new ApiResponse(error.statusCode, error, error.message));
+
+      }
+      return res.status(500).json(new ApiResponse(500, error, error?.message));
    }
 };
 
@@ -64,18 +69,18 @@ const logoutController = async function (req,res){
          )
     } catch (error) {
         console.log(error.message);
-        throw new ApiError(500, error?.message);
+        res.status(400).json(new ApiError(500, error?.message, error));
     }
 }
 const getUserController = async function (req,res){
     try {
          return res.status(200)
          .json(
-            new ApiResponse(200,req.user,'User SuccessFully Logout')
+            new ApiResponse(200,req.user,'Getting User Details SuccessFully')
          )
     } catch (error) {
         console.log(error.message);
-        throw new ApiError(500, error?.message);
+        res.status(500).json(new ApiError(500, error?.message, error));
     }
 }
 const findAllUserController = async function (req,res){
@@ -86,11 +91,11 @@ const findAllUserController = async function (req,res){
       if(!responseAllUser) new ApiError(401,"User not here")
          return res.status(200)
          .json(
-            new ApiResponse(200,responseAllUser,'User SuccessFully Logout')
+            new ApiResponse(200,responseAllUser,' SuccessFully Fetch All User')
          )
     } catch (error) {
         console.log(error.message);
-        throw new ApiError(500, error.message);
+        res.status(500).json(new ApiError(500, error?.message, error));
     }
 }
 export { registrationController, loginController, logoutController, getUserController,findAllUserController };
