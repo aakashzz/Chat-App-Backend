@@ -49,7 +49,7 @@ const wss = new WebSocketServer({ server: httpServer });
 const rooms = {};
 
 wss.on("connection", (ws, req) => {
-   ws.send("Connected Server");
+   ws.send(JSON.stringify("Connected Server"));
 
    ws.on("message", (data) => {
       const parseData = JSON.parse(data);

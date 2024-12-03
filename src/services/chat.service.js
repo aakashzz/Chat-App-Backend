@@ -3,33 +3,27 @@ import ApiError from "../utils/ApiError.js";
 import { Message } from "../models/message.model.js";
 import NodeCache from "node-cache";
 
-const nodeCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+// const nodeCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 //create chat service
 export async function createChatService(userId, receiverId) {
+   console.log("Given Value",userId,receiverId)
    const newChatResponse = await Chat.create({
       user: [userId, receiverId],
-      isGroup: false,
    });
    if (!newChatResponse) new ApiError(401, "New Chat Not create");
-   nodeCache.del("chatUser");
-   console.log(newChatResponse);
+
    return newChatResponse;
 }
 
 //show all User Service
 export async function showAllChatUserService(userId) {
    let showChatUserResponse;
-   if (!nodeCache.get("chatUser")) {
-      showChatUserResponse = await Chat.find({
-         user: userId,
-      })
-         .populate("user")
-         .select("-password -accessToken");
-      nodeCache.set("chatUser", showChatUserResponse);
-   } else {
-      showChatUserResponse = nodeCache.get("chatUser");
-   }
+
+   showChatUserResponse = await Chat.find({
+      user: userId,
+   }).populate("user");
+
    if (!showChatUserResponse) throw new ApiError(400, "Show Chat Not Work");
 
    //this method filter not logged in user details

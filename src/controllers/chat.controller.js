@@ -20,7 +20,7 @@ const createChatController = async function (req, res) {
          .json(new ApiResponse(201, result, "Chat Will Be Created"));
    } catch (error) {
       console.error("create Chat error in backend", error);
-      res.status(error.statusCode).json(new ApiResponse(error?.statusCode, error, error?.message));
+     return res.status(error.statusCode).json(new ApiResponse(error?.statusCode, error, error?.message));
    }
 };
 
